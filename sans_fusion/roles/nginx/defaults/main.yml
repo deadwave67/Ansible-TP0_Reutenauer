@@ -1,0 +1,3 @@
+users:
+ - { 'name': reutenauer , 'pass': adminx }
+ - { 'name': test , 'pass': adminx }

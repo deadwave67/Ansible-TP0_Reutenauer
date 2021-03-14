@@ -1,0 +1,10 @@
+#!/usr/bin/env ansible-playbook
+- hosts: web
+  roles:
+    - apache2
+    - commun
+
+- hosts: loadbalancer
+  roles:
+    - nginx
+    - commun

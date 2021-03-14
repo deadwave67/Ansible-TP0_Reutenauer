@@ -1,0 +1,11 @@
+- import_tasks: apache.yml
+  when: "'loadbalancer'not in {{ group_names }}"
+
+- import_tasks: commun.yml
+  when: "'web' in {{ group_names }}"
+
+- import_tasks: nginx.yml
+  when: "'web' not in {{ group_names }}"
+
+- import_tasks: commun.yml
+  when: "'loadbalancer' in {{ group_names }}"

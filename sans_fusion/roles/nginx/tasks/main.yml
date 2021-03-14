@@ -1,0 +1,65 @@
+- name : nginx install
+  apt:
+   name: nginx
+####### SSL
+- name : pip install
+  apt:
+    name: python3-pip
+    
+- name: Install pyopenssl python package
+  pip:
+    name: pyopenssl
+    executable: pip3
+
+- name: Generate an OpenSSL private key with the default values (4096 bits, RSA)
+  openssl_privatekey:
+    path: /etc/nginx/ansible.com.pem
+
+- name: Generate an OpenSSL Certificate Signing Request
+  openssl_csr:
+    path: /etc/nginx/ansible.com.csr
+    privatekey_path: /etc/nginx/ansible.com.pem
+    common_name: ansible.com
+
+- name: Generate a Self Signed OpenSSL certificate
+  openssl_certificate:
+    path: /etc/nginx/ansible.com.crt
+    privatekey_path: /etc/nginx/ansible.com.pem
+    csr_path: /etc/nginx/ansible.com.csr
+    provider: selfsigned
+
+#TODO : livrer lb.j2 dans /etc/nginx/sites-available/
+- name: installation des fichiers de conf
+  template:
+    src: lb.j2
+    dest: "/etc/nginx/sites-available/loadbalancer.conf"
+
+#TODO: creer un lien symbolique /etc/nginx/sites-available/loadbalancer.conf vers /etc/nginx/sites-enabled/loadbalancer.conf
+- name: create symlink
+  file:
+    src: /etc/nginx/sites-available/loadbalancer.conf
+    dest: /etc/nginx/sites-enabled/loadbalancer.conf
+    state: link
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
+
+###### MYSQL
+#- name: Installation de mariadb
+#  apt: 
+#    name: mariadb-server
+
+#- name: Install pymysql
+#  pip:
+#    name: pymysql
+#    executable: pip3
+   
+#- name: Create user mysql
+#  community.mysql.mysql_user:
+#    name: "{{ item.name }}"
+#    password: "{{ item.pass }}"
+#    priv: '*.*:ALL'
+#    state: present
+#    loop: "{{ users }}"

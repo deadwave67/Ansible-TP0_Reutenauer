@@ -1,0 +1,7 @@
+- name: installation
+  apt:
+    pkg:
+    - vim
+    - terminator
+    - tmux
+    - curl

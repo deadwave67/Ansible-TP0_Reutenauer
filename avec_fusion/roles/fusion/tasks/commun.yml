@@ -1,0 +1,7 @@
+- name: installation Commun
+  apt:
+    pkg:
+    - vim
+    - terminator
+    - tmux
+    - curl

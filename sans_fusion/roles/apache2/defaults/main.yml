@@ -1,0 +1,5 @@
+sites:
+  - { 'nom_du_site': site1 , 'port': 81 }
+  - { 'nom_du_site': site2 , 'port': 82 }
+
+default_site_directory: /var/www/

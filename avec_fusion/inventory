@@ -1,0 +1,17 @@
+all:
+  hosts:
+    machine1:
+      ansible_host: 192.168.33.15
+  children:
+    loadbalancer:
+      hosts:
+        theLB:
+          ansible_host: 192.168.33.18        
+    web:
+      hosts:
+        theApache:
+          ansible_host: 192.168.33.17
+          sites:
+            - { 'nom_du_site': site1 , 'port': 81 }
+            - { 'nom_du_site': site2 , 'port': 82  }
+            - { 'nom_du_site': site3 , 'port': 83  }

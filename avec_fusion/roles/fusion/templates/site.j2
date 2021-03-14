@@ -1,0 +1,7 @@
+<VirtualHost *:{{ item.port }}>
+        ServerAdmin webmaster@localhost
+        DocumentRoot {{default_site_directory}}{{ item.nom_du_site }}
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>

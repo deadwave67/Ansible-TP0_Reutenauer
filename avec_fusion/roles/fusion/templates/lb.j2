@@ -1,0 +1,18 @@
+upstream nginx-proxy {
+  {% for host in groups['web'] %}
+    {% for site in hostvars[host].sites %}
+      server {{ hostvars[host].ansible_eth1.ipv4.address }}:{{ site.port }};
+    {% endfor %}
+  {% endfor %}
+}
+
+# RP
+server {
+  listen 9000 ssl;
+  server_name nameserver;
+  ssl_certificate ansible.com.crt;
+  ssl_certificate_key ansible.com.pem;
+  location / {
+    proxy_pass http://nginx-proxy;
+  }
+}

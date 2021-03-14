@@ -1,0 +1,43 @@
+- name : apache installation
+  apt:
+    name: apache2
+
+- name: add directory for sites
+  file:
+    state: directory
+    path: "/var/www/{{ item.nom_du_site }}"
+  loop: "{{ sites }}"
+
+- name: add index.html in sites
+  lineinfile:
+    state: present
+    create: yes
+    path: "/var/www/{{ item.nom_du_site }}/index.html"
+    line: "site de {{ item.nom_du_site }}"
+  loop: "{{ sites }}"
+
+- name: deploy apache site files
+  template:
+    src: "site.j2"
+    dest: "/etc/apache2/sites-available/{{item.nom_du_site}}.conf"
+  loop: "{{ sites }}"
+
+- name: apache2 ativate VirtualHost
+  command: a2ensite {{ item.nom_du_site }}
+  loop: "{{ sites }}"
+
+- name: add listen
+  lineinfile:
+    path: /etc/apache2/ports.conf
+    line: "Listen {{ item.port }}"
+  loop: "{{ sites }}"
+
+- name: restart apache2
+  service:
+    name: apache2
+    state: restarted
+
+
+
+
+
